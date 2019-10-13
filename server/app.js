@@ -6,6 +6,7 @@ const logger = require('morgan');
 
 const indexRouter = require('./routes/index');
 const notifyRouter = require('./routes/notify');
+const notifyBuildRouter = require('./routes/notifyBuild');
 
 const app = express();
 
@@ -20,7 +21,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/notify', notifyRouter);
+app.use('/notify_agent', notifyRouter);
+app.use('/notify_build_result', notifyBuildRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

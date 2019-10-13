@@ -1,24 +1,47 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const { exec } = require('child_process');
-
+const fetch = require('node-fetch');
+const execHelper = require('../utils/execCommandUtil');
 /* GET users listing. */
+const MEDIUM_POST_URL = `http://localhost:3001`;
 router.get('/', function(req, res, next) {
-	console.log(path.join(__dirname, '..', '..', 'agent'));
-	exec(
-		'node ./bin/www 3001',
+	const { host = '', port = '', command, repository } = req.query;
+	execHelper(`node ./bin/www ${port} ${host}`, {
+		cwd: path.join(process.cwd(), '..', 'agent')
+	})
+		.then((res) => {
+			console.log(res);
+			return fetch(
+				`${MEDIUM_POST_URL}/build?command=${command}&repository=${repository}`
+			);
+		})
+		.then((res) => {
+			res.json({ data: JSON.stringify(res) });
+		})
+		.catch((err) => console.log(err));
+	/* exec(
+		`node ./bin/www ${port} ${host}`,
 		{
-			cwd: path.join(__dirname, '..', '..', 'agent')
+			cwd: path.join(process.cwd(), '..', 'agent')
 		},
 		(err, stdout) => {
 			if (err) {
 				console.log(err);
 			}
-			console.log(stdout);
+			fetch(
+				`${MEDIUM_POST_URL}/build?command=${command}&repository=${repository}`
+			).then((res) => {
+				res.json({ data: res });
+			});
 		}
-	);
-	res.send('respond with a resource');
+	); */
+});
+
+router.get('/close', function(req, res, next) {
+	fetch(`${MEDIUM_POST_URL}/close`).then(() => {
+		res.json({ data: 'proccess closed' });
+	});
 });
 
 module.exports = router;
