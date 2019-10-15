@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  div
+    p=`Command: ${build.command}`
+    p=`Status: ${build.status}`
+    p=`Agent: ${build.agent}`
+    p=`Time start: ${build.timeStart}`
+    p=`Time end: ${build.timeEnd}`
+    p=build.stdout
+    p=build.stderr

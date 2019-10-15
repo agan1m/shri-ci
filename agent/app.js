@@ -19,7 +19,7 @@ app.use('/build', buildRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-	res.status(404).json({ messge: 'Error' });
+	res.status(404).json({ message: 'Error' });
 });
 
 // error handler

@@ -5,3 +5,6 @@ block content
   p Welcome to #{title}
   button#deploy Deploy
   button#close close
+  each build in builds
+    div
+      a(href=`build/${build.id}`)=`Build ${build.id} ${build.status}`
